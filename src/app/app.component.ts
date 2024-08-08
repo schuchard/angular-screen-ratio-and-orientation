@@ -14,12 +14,17 @@ import {
 export class AppComponent implements OnInit {
   screenWidth = signal(0);
   screenHeight = signal(0);
-  aspectRatio = computed(
+  aspectRatio = computed(() => this.screenWidth() / this.screenHeight());
+  heightRatio = computed(() => this.screenHeight() / this.screenWidth());
+
+  aspectRatioSimplified = computed(
     () =>
-      `${this.simplifyAspectRatio(this.screenWidth(), this.screenHeight())} ${(
-        this.screenWidth() / this.screenHeight()
-      ).toFixed(2)}`
+      `${this.simplifyAspectRatio(
+        this.screenWidth(),
+        this.screenHeight()
+      )} ${this.aspectRatio().toFixed(2)}`
   );
+
   screenSize = computed(() => `${this.screenWidth()}x${this.screenHeight()}`);
 
   @HostListener('window:resize', ['$event'])
