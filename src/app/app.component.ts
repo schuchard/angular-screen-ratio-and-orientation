@@ -14,8 +14,11 @@ import {
 export class AppComponent implements OnInit {
   screenWidth = signal(0);
   screenHeight = signal(0);
-  aspectRatio = computed(() =>
-    ((this.screenWidth() / this.screenHeight()) * 100).toFixed(2)
+  aspectRatio = computed(
+    () =>
+      `${this.simplifyAspectRatio(this.screenWidth(), this.screenHeight())} ${(
+        this.screenWidth() / this.screenHeight()
+      ).toFixed(2)}`
   );
   screenSize = computed(() => `${this.screenWidth()}x${this.screenHeight()}`);
 
@@ -27,5 +30,23 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.onResize();
+  }
+
+  // Function to calculate the greatest common divisor (GCD) using the Euclidean algorithm
+  gcd(a: number, b: number) {
+    while (b !== 0) {
+      let temp = b;
+      b = a % b;
+      a = temp;
+    }
+    return a;
+  }
+
+  // Function to simplify the aspect ratio
+  simplifyAspectRatio(width: number, height: number) {
+    const divisor = this.gcd(width, height);
+    const simplifiedWidth = width / divisor;
+    const simplifiedHeight = height / divisor;
+    return `${simplifiedWidth}:${simplifiedHeight}`;
   }
 }
